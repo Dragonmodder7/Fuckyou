@@ -10,19 +10,19 @@ def instalar_proxychain():
     conf_path = "/etc/proxychains.conf"
     backup_path = "/etc/proxychains.conf.bak"
 
-    # Faz backup da configuração original
+    
     if not os.path.exists(backup_path):
         os.system(f"cp {conf_path} {backup_path}")
 
-    # Descomenta dynamic_chain e comenta strict_chain para uso dinâmico
+    
     os.system(f"sed -i 's/^#dynamic_chain/dynamic_chain/' {conf_path}")
     os.system(f"sed -i 's/^strict_chain/#strict_chain/' {conf_path}")
     os.system(f"sed -i 's/^#proxy_dns/proxy_dns/' {conf_path}")
 
-    # Remove duplicatas da linha socks5 se já existir
+    
     os.system(f"sed -i '/socks5 127.0.0.1 9050/d' {conf_path}")
 
-    # Adiciona proxy SOCKS5 do Tor ao final do arquivo
+
     os.system(f"echo 'socks5 127.0.0.1 9050' >> {conf_path}")
 
     time.sleep(1)
