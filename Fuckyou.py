@@ -4,12 +4,29 @@ import time
 def instalar_proxychain():
     print("\033[1;32m[*] Instalando proxychains...\033[0m")
     os.system("apt update && apt install -y proxychains")
+
     print("\033[1;32m[*] Configurando proxychains...\033[0m")
-    
-    # Modificar o arquivo de configuração para usar o SOCKS5 no Tor
-    os.system("sed -i '/^#dynamic_chain/a socks5 127.0.0.1 9050' /etc/proxychains.conf")
+
+    conf_path = "/etc/proxychains.conf"
+    backup_path = "/etc/proxychains.conf.bak"
+
+    # Faz backup da configuração original
+    if not os.path.exists(backup_path):
+        os.system(f"cp {conf_path} {backup_path}")
+
+    # Descomenta dynamic_chain e comenta strict_chain para uso dinâmico
+    os.system(f"sed -i 's/^#dynamic_chain/dynamic_chain/' {conf_path}")
+    os.system(f"sed -i 's/^strict_chain/#strict_chain/' {conf_path}")
+    os.system(f"sed -i 's/^#proxy_dns/proxy_dns/' {conf_path}")
+
+    # Remove duplicatas da linha socks5 se já existir
+    os.system(f"sed -i '/socks5 127.0.0.1 9050/d' {conf_path}")
+
+    # Adiciona proxy SOCKS5 do Tor ao final do arquivo
+    os.system(f"echo 'socks5 127.0.0.1 9050' >> {conf_path}")
+
     time.sleep(1)
-    print("\033[1;32m[*] Proxychains configurado com sucesso!\033[0m")
+    print("\033[1;32m[*] Proxychains tunado com sucesso!\033[0m")
 
 def banner():
     os.system("clear")
