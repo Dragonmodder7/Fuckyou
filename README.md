@@ -5,7 +5,7 @@ sudo apt-upgrade
 
 sudo apt-update
 
-git clone https://github.com/dragonmodder7/Fuckyou
+git clone https://github.com/JhonLamdenberguer/Fuckyou
 
 cd Fuckyou
 
